@@ -99,7 +99,10 @@
       "position": [
         440,
         300
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000
     },
     {
       "parameters": {
@@ -233,7 +236,10 @@
         1560,
         200
       ],
-      "webhookId": "0c9e1d2a-3b4c-4d5e-8f60-718293a4b5c6"
+      "webhookId": "0c9e1d2a-3b4c-4d5e-8f60-718293a4b5c6",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000
     },
     {
       "parameters": {
@@ -251,7 +257,10 @@
         900,
         420
       ],
-      "webhookId": "9d8c7b6a-5f4e-4d3c-8b2a-1f0e9d8c7b6a"
+      "webhookId": "9d8c7b6a-5f4e-4d3c-8b2a-1f0e9d8c7b6a",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000
     }
   ],
   "connections": {

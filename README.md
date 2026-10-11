@@ -93,7 +93,9 @@ docker compose up -d
 
 Acesse <http://localhost:5678> e crie o usuário administrador.
 
-> Sem Docker: defina as variáveis no sistema antes de iniciar (`OPENWEATHER_API_KEY`, `WEBHOOK_URL` e `N8N_BLOCK_ENV_ACCESS_IN_NODE=false`) e rode `npx n8n`.
+> Sem Docker: defina as variáveis no sistema antes de iniciar (`OPENWEATHER_API_KEY`, `TELEGRAM_BOT_TOKEN`, `WEBHOOK_URL`/`N8N_WEBHOOK_URL` e `N8N_BLOCK_ENV_ACCESS_IN_NODE=false`) e rode `npx n8n`.
+>
+> No N8N 2.x, depois de importar, clique em **Publish** no topo do workflow para registrar o webhook no Telegram.
 
 ### 2. Importar o workflow
 
@@ -126,6 +128,19 @@ Não há credencial a criar: o nó **OpenWeather - Clima atual** já lê `{{ $en
 | `Cidadeinexistente` | `❌ Cidade não encontrada. Use o formato Cidade,UF,BR (ex.: São Paulo,SP,BR).` |
 
 (As temperaturas variam conforme o clima do momento.)
+
+### Testes realizados (11/10/2026, N8N 2.42.6)
+
+| Mensagem enviada | `queue` gerada | HTTP | Resposta do bot |
+|---|---|---|---|
+| `Belo horizonte` | `belo horizonte` | 200 | 🌤️ A temperatura em Belo Horizonte é de 30°C. |
+| `Sao paulo, sp, br` | `sao paulo,sp,br` | 200 | 🌤️ A temperatura em São Paulo é de 23°C. |
+| `Curitiba, pr, br` | `curitiba,pr,br` | 200 | 🌤️ A temperatura em Curitiba é de 20°C. |
+| `São paulo sp br` (sem vírgulas) | `sao paulo sp br` | 404 | ❌ Cidade não encontrada. Use o formato Cidade,UF,BR (ex.: São Paulo,SP,BR). |
+| `Sao paulo, sp, r` (país inválido) | `sao paulo,sp,r` | 404 | ❌ Cidade não encontrada. Use o formato Cidade,UF,BR (ex.: São Paulo,SP,BR). |
+| `/start` (sem cidade) | *(vazia)* | 400 | ❌ Cidade não encontrada. Use o formato Cidade,UF,BR (ex.: São Paulo,SP,BR). |
+
+Os nós de envio ao Telegram e a chamada à OpenWeather têm **Retry on Fail** (3 tentativas), para que uma falha de rede momentânea não deixe o usuário sem resposta.
 
 ## Opcional: Google Gemini
 
